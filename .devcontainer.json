@@ -1,0 +1,13 @@
+{
+  "customizations": {
+    "codespaces": {
+      "openFiles": []
+    },
+    "vscode": {
+      "extensions": [
+        "kieler.keith-vscode",
+        "kieler.klighd-vscode"
+      ]
+    }
+  }
+}
