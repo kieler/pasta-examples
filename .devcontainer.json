@@ -5,7 +5,7 @@
     },
     "vscode": {
       "extensions": [
-        "kieler.keith-vscode",
+        "kieler.pasta",
         "kieler.klighd-vscode"
       ]
     }
