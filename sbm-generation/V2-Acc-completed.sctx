@@ -1,0 +1,115 @@
+#hostcode-java "import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
+                import ev3dev.sensors.ev3.EV3UltrasonicSensor;
+                import lejos.hardware.port.MotorPort;
+                import lejos.robotics.SampleProvider;
+                import lejos.hardware.port.SensorPort;"
+
+scchart Adaptive_Cruise_Control {
+
+    host class "EV3LargeRegulatedMotor" {
+        private schedule {commuting, conflicting} MotorSD
+        void forward() schedule MotorSD 0
+        void setSpeed(int speed) schedule MotorSD 1
+        int getSpeed() schedule MotorSD 0
+    }
+    motorL = `new EV3LargeRegulatedMotor(MotorPort.B);`,
+    motorR = `new EV3LargeRegulatedMotor(MotorPort.C);`
+
+    host class "SampleProvider" {
+        void fetchSample(float sample[1], int offset)
+        int sampleSize()
+    } sp = `(new EV3UltrasonicSensor(SensorPort.S4)).getDistanceMode();`
+
+    @hide
+    method float readDistance() {
+      float sample[1] = {sp.sampleSize()}
+      sp.fetchSample(sample, 0);
+      return sample[0]
+    }
+    
+    entry do motorL.setSpeed(0);
+        motorR.setSpeed(0);
+        motorL.forward();
+        motorR.forward()
+
+
+    dataflow {
+        int currentDistance
+        int safeDistance
+//        int minDistance = 7
+
+        ref SBM_Controller controller
+        ref NewSpeed newSpeed
+       
+        // Input
+        currentDistance = readDistance()
+        safeDistance = (motorL.getSpeed() > 200) ? 35 : 20;
+
+        // Control
+        controller.distance = currentDistance
+        controller.safeDistance = safeDistance
+        controller.minDistance = 10
+        
+        // React
+        newSpeed.currentSpeed = motorL.getSpeed()
+        newSpeed.controlAction = controller.controlAction
+
+        // Actuate
+        motorL.setSpeed(newSpeed.newSpeed)
+        motorL.forward()
+        motorR.setSpeed(newSpeed.newSpeed)
+        motorR.forward()
+    }
+
+
+}
+
+scchart NewSpeed {
+  input int currentSpeed
+  input ref SBM_Controller.Controller controlAction
+  output int newSpeed
+  
+  entry do newSpeed = 0
+  
+  initial state I ""
+  if controlAction == scchart(SBM_Controller).Controller.accelerate do newSpeed = currentSpeed + 10 go to I 
+  if controlAction == scchart(SBM_Controller).Controller.decelerate do newSpeed = (currentSpeed < 10) ? 0 : currentSpeed - 10 go to I 
+  if controlAction == scchart(SBM_Controller).Controller.stop do newSpeed = 0 go to I 
+}
+
+scchart SBM_Controller {
+
+enum Controller {accelerate, decelerate, stop, NULL}
+input int distance
+input int minDistance
+input int safeDistance
+output ref Controller controlAction
+
+initial state NoAction {
+  entry do controlAction = Controller.NULL
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance>=safeDistance go to accelerate_distanceGreaterOrEqualTosafeDistance
+if distance<=minDistance go to stop
+
+state stop {
+  entry do controlAction = Controller.stop
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance>=safeDistance go to accelerate_distanceGreaterOrEqualTosafeDistance
+
+state accelerate_distanceGreaterOrEqualTosafeDistance "accelerate (distance>=safeDistance)" {
+entry do controlAction = Controller.accelerate
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance<=minDistance go to stop
+if distance==safeDistance go to NoAction
+if !(distance>=safeDistance) go to NoAction
+
+state decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance "decelerate (distance>=minDistance && distance<=safeDistance)" {
+entry do controlAction = Controller.decelerate
+}
+if distance>=safeDistance && !(distance>=minDistance && distance<=safeDistance) go to accelerate_distanceGreaterOrEqualTosafeDistance
+if distance<=minDistance && !(distance>=minDistance && distance<=safeDistance) go to stop
+
+}

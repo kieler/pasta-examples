@@ -1,0 +1,52 @@
+Components
+Scenario1 "The Software sends the accelerate command while the timeGap is too small,
+                    because it was calculated incorrectly"
+Scenario10 "The Software sends the decelerate command too late,
+                    because the time gap calculation took too long."
+Scenario16 "The Software does not send the stop command when the time gap is zero,
+                    because the time gap calculation is wrong."
+Scenario2 "The Software sends the accelerate command while the timeGap is too small,
+                    because the sensor sends the wrong speed"
+Scenario3 "The Software sends the accelerate command while the timeGap is too small."
+Scenario4 "The Software sends the accelerate command while the timeGap is too small,
+                    because the sensor sends the updated speed with too much delay."
+Scenario6 "The Software sends the accelerate command too long,
+                    because the sensor sends the updated speed with too much delay."
+Scenario8 "The Software sends the decelerate command too late,
+                    because the sensor sent the current speed too late."
+Scenario14 "The Software sends the stop command too late,
+                    because the sensor sends the updated speed with too much delay."
+Scenario5 "The Software does not send the accelerate command while the timeGap is too small,
+                    but the actuator applies speed due to a malfunction."
+Scenario11 "The Sofware send the decelerating command while the time gap is too small,
+                    but the actuator stopped applying it too soon because of a malfunction."
+Scenario13 "The Software sends the decelerate command while the time gap is too small,
+                    but the actuator does not apply it."
+Scenario19 "The brakes are activated but are not installed correctly."
+Scenario20 "The sensor determines the wrong speed."
+Scenario21 "The actuator does not apply the correct force."
+Scenario7 "The Software sends the accelerate command too long,
+                    because it still believes that the time gap is big enough."
+Scenario15 "The Software does not send the stop command when the time gap is zero,
+                    because it still believes that the time gap is big enough."
+Scenario9 "The Software sends the decelerate command too late,
+                    because the actuator did not react fast enough."
+Scenario12 "The Sofware stops decelerating too soon while the time gap is too small,
+                    because the sensore sends the wrong speed."
+Scenario17 "The brakes are applied but they are too outworn to take effect."
+Scenario18 "The sensor is not correctly calebrated after a long time of use."
+
+TopEvent
+"The ACC software does not keep a safe distance from the vehicle robot ahead." = G0
+
+Gates
+G1 "inadequateControlAlgorithm" = Scenario1 or Scenario10 or Scenario16
+G2 "incorrectInformationProvided" = Scenario2
+G3 "controlAction" = Scenario3
+G4 "delayedFeedback" = Scenario4 or Scenario6 or Scenario8 or Scenario14
+G5 "componentFailure" = Scenario5 or Scenario11 or Scenario13 or Scenario19 or Scenario20 or Scenario21
+G6 "wrongProcessModel" = Scenario7 or Scenario15
+G7 "delayedOperation" = Scenario9
+G8 "measurementInaccurate" = Scenario12
+G9 "changesOverTime" = Scenario17 or Scenario18
+G0 = G1 or G2 or G3 or G4 or G5 or G6 or G7 or G8 or G9

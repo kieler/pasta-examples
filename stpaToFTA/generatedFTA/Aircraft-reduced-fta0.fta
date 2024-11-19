@@ -1,0 +1,15 @@
+Components
+Scenario1 "The aircraft lands, but delays within the BSCU result in braking too late."
+Scenario2 "Abnormal WBS behavior occurs and a BSCU fault indication is provided to the crew. The crew does not power off the BSCU."
+Scenario3 "The BSCU does not brake upon landing because it incorrectly believes the aircraft has already stopped"
+Scenario4 "The BSCU brakes upon landing, but the brakes are not applied due to insufficient hydraulic pressure."
+Scenario5 "The BSCU does not brake, but the brakes are applied due to hydraulic valve failure."
+
+TopEvent
+"Aircraft comes too close to other objects on the ground" = G0
+
+Gates
+G1 "No causal factor" = Scenario1 or Scenario2
+G2 "wrongProcessModel" = Scenario3
+G3 "componentFailure" = Scenario4 or Scenario5
+G0 = G1 or G2 or G3

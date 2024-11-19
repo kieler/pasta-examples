@@ -1,0 +1,13 @@
+Losses
+L1 "Loss of life or serious injury to people"
+
+Hazards
+H1 "Aircraft comes too close to other objects on the ground" [L1] 
+H2 "Controlled flight of aircraft into terrain" [L1]
+
+LossScenarios
+Scenario1 "The aircraft lands, but delays within the BSCU result in braking too late."  [H1, H2]
+Scenario2 "Abnormal WBS behavior occurs and a BSCU fault indication is provided to the crew. The crew does not power off the BSCU."  [H1]
+Scenario3 <wrongProcessModel> "The BSCU does not brake upon landing because it incorrectly believes the aircraft has already stopped" [H1]
+Scenario4 <componentFailure> "The BSCU brakes upon landing, but the brakes are not applied due to insufficient hydraulic pressure." [H1]
+Scenario5 <componentFailure> "The BSCU does not brake, but the brakes are applied due to hydraulic valve failure." [H1]

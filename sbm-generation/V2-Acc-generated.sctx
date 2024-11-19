@@ -1,0 +1,36 @@
+scchart SBM_Controller {
+
+enum Controller {accelerate, decelerate, stop, NULL}
+input int distance
+input int minDistance
+input int safeDistance
+output ref Controller controlAction
+
+initial state NoAction {
+  entry do controlAction = Controller.NULL
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance>=safeDistance go to accelerate_distanceGreaterOrEqualTosafeDistance
+if distance<=minDistance go to stop
+
+state stop {
+  entry do controlAction = Controller.stop
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance>=safeDistance go to accelerate_distanceGreaterOrEqualTosafeDistance
+
+state accelerate_distanceGreaterOrEqualTosafeDistance "accelerate (distance>=safeDistance)" {
+entry do controlAction = Controller.accelerate
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance<=minDistance go to stop
+if distance==safeDistance go to NoAction
+if !(distance>=safeDistance) go to NoAction
+
+state decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance "decelerate (distance>=minDistance && distance<=safeDistance)" {
+entry do controlAction = Controller.decelerate
+}
+if distance>=safeDistance && !(distance>=minDistance && distance<=safeDistance) go to accelerate_distanceGreaterOrEqualTosafeDistance
+if distance<=minDistance && !(distance>=minDistance && distance<=safeDistance) go to stop
+
+}
