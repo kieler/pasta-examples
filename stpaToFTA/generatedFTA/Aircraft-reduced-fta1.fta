@@ -1,0 +1,9 @@
+Components
+Scenario1 "The aircraft lands, but delays within the BSCU result in braking too late."
+
+TopEvent
+"Controlled flight of aircraft into terrain" = G0
+
+Gates
+G1 "No causal factor" = Scenario1
+G0 = G1

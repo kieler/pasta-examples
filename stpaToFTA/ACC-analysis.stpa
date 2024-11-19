@@ -1,0 +1,115 @@
+Losses
+L1 "The ACC robot crashes the robot ahead"
+
+Hazards
+H1 "The ACC software does not keep a safe distance from the vehicle robot ahead." [L1]
+
+ControlStructure
+ACC {
+    Software {
+        processModel {
+            currentSpeed: [desiredSpeed, lessDesiredSpeed, greaterDesiredSpeed]
+            timeGap: [lessSafetyTimeGap, greaterSafetyTimeGap, zero]
+        }
+        controlActions {
+            [acc "Accelerate", dec "Decelerate", stop "FullyStop"] -> Robot
+        }
+    }
+    Robot {
+        feedback {
+            [speed "current speed"] -> Software
+        }
+    }
+}
+
+Context-Table
+RL1 {
+    controlAction: Software.acc
+    type: provided
+    contexts: {
+        UCA1 [timeGap = lessSafetyTimeGap] [H1]
+        UCA2 [timeGap = zero] [H1]
+    }
+}
+RL2 {
+    controlAction: Software.acc
+    type: applied-too-long
+    contexts: {
+        UCA3 [timeGap = greaterSafetyTimeGap] [H1]
+    }
+}
+////////////////
+RL3 {
+    controlAction: Software.dec
+    type: too-late
+    contexts: {
+        UCA4 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+RL4 {
+    controlAction: Software.dec
+    type: stopped-too-soon
+    contexts: {
+        UCA5 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+RL5 {
+    controlAction: Software.dec
+    type: not-provided
+    contexts: {
+        UCA6 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+////////////
+RL6 {
+    controlAction: Software.stop
+    type: too-late
+    contexts: {
+        UCA7 [timeGap = zero] [H1]
+    }
+}
+RL7 {
+    controlAction: Software.stop
+    type: not-provided
+    contexts: {
+        UCA8 [timeGap = zero] [H1]
+    }
+}
+
+LossScenarios
+Scenario1 <inadequateControlAlgorithm> for UCA1 "The Software sends the accelerate command while the timeGap is too small,
+                    because it was calculated incorrectly"
+Scenario2 <incorrectInformationProvided> for UCA1 "The Software sends the accelerate command while the timeGap is too small,
+                    because the sensor sends the wrong speed"
+Scenario3 <controlAction> for UCA1 "The Software sends the accelerate command while the timeGap is too small."
+Scenario4 <delayedFeedback> for UCA1 "The Software sends the accelerate command while the timeGap is too small,
+                    because the sensor sends the updated speed with too much delay."
+Scenario5 <componentFailure> for UCA1 "The Software does not send the accelerate command while the timeGap is too small,
+                    but the actuator applies speed due to a malfunction."
+Scenario6 <delayedFeedback> for UCA3 "The Software sends the accelerate command too long,
+                    because the sensor sends the updated speed with too much delay."
+Scenario7 <wrongProcessModel> for UCA3 "The Software sends the accelerate command too long,
+                    because it still believes that the time gap is big enough."
+Scenario8 <delayedFeedback> for UCA4 "The Software sends the decelerate command too late,
+                    because the sensor sent the current speed too late."
+Scenario9 <delayedOperation> for UCA4 "The Software sends the decelerate command too late,
+                    because the actuator did not react fast enough."
+Scenario10 <inadequateControlAlgorithm> for UCA4 "The Software sends the decelerate command too late,
+                    because the time gap calculation took too long."
+Scenario11 <componentFailure> for UCA5 "The Sofware send the decelerating command while the time gap is too small,
+                    but the actuator stopped applying it too soon because of a malfunction."
+Scenario12 <measurementInaccurate> for UCA5 "The Sofware stops decelerating too soon while the time gap is too small,
+                    because the sensore sends the wrong speed."
+Scenario13 <componentFailure> for UCA6 "The Software sends the decelerate command while the time gap is too small,
+                    but the actuator does not apply it."
+Scenario14 <delayedFeedback> for UCA7 "The Software sends the stop command too late,
+                    because the sensor sends the updated speed with too much delay."
+Scenario15 <wrongProcessModel> for UCA8 "The Software does not send the stop command when the time gap is zero,
+                    because it still believes that the time gap is big enough."
+Scenario16 <inadequateControlAlgorithm> for UCA8 "The Software does not send the stop command when the time gap is zero,
+                    because the time gap calculation is wrong."
+Scenario17 <changesOverTime> "The brakes are applied but they are too outworn to take effect." [H1]
+Scenario18 <changesOverTime> "The sensor is not correctly calebrated after a long time of use." [H1]
+Scenario19 <componentFailure> "The brakes are activated but are not installed correctly." [H1]
+Scenario20 <componentFailure> "The sensor determines the wrong speed." [H1]
+Scenario21 <componentFailure> "The actuator does not apply the correct force." [H1]

@@ -1,0 +1,35 @@
+ControlStructure
+Aircraft {
+    ControllerA {
+        hierarchyLevel 0
+        controlActions {
+            [ca "control action"] -> ControllerB1
+        }
+    }
+    ControllerB {
+        hierarchyLevel 1
+        ControllerB1 {
+            controlActions {
+                [ca "control action"] -> ControllerB2
+            }
+            feedback {
+                [fb "feedback"] -> ControllerA
+            }
+        }
+        ControllerB2 {
+            controlActions {
+                [ca "control action"] -> ControlledProcess
+            }
+            feedback {
+                [fb "feedback"] -> ControllerB1
+            }
+        }
+    }
+    ControlledProcess {
+        hierarchyLevel 2
+        feedback {
+            [fb "feedback"] -> ControllerB2
+        }
+    }
+}
+

@@ -1,0 +1,100 @@
+Losses
+L1 "The ACC robot crashes the robot ahead"
+
+Hazards
+H1 "The ACC software does not keep a safe distance from the vehicle robot ahead." [L1]
+
+ControlStructure
+ACC {
+    Software {
+        processModel {
+            currentSpeed: [desiredSpeed=[desiredSpeed], lessDesiredSpeed = [MIN, desiredSpeed), greaterDesiredSpeed=(desiredSpeed, MAX]]
+            timeGap: [lessSafetyTimeGap=(0, safetyTimeGap], greaterSafetyTimeGap=(safetyTimeGap, MAX], zero=[0]]
+        }
+        controlActions {
+            [acc "Accelerate", dec "Decelerate", stop "Fully Stop"] -> Robot
+        }
+    }
+    Robot {
+        feedback {
+            [speed "Speed"] -> Software
+        }
+    }
+}
+
+Context-Table
+// acceleration
+RL1 {
+    controlAction: Software.acc
+    type: provided
+    contexts: {
+        UCA1 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+RL2 {
+    controlAction: Software.acc
+    type: applied-too-long
+    contexts: {
+        UCA2 [timeGap = greaterSafetyTimeGap] [H1]
+    }
+}
+RL3 {
+    controlAction: Software.acc
+    type: provided
+    contexts: {
+        UCA3 [timeGap = zero] [H1]
+    }
+}
+// deceleration
+RL4 {
+    controlAction: Software.dec
+    type: too-late
+    contexts: {
+        UCA4 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+RL5 {
+    controlAction: Software.dec
+    type: stopped-too-soon
+    contexts: {
+        UCA5 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+RL6 {
+    controlAction: Software.dec
+    type: not-provided
+    contexts: {
+        UCA6 [timeGap = lessSafetyTimeGap] [H1]
+    }
+}
+// stop
+RL7 {
+    controlAction: Software.stop
+    type: too-late
+    contexts: {
+        UCA7 [timeGap = zero] [H1]
+    }
+}
+RL8 {
+    controlAction: Software.stop
+    type: not-provided
+    contexts: {
+        UCA8 [timeGap = zero] [H1]
+    }
+}
+
+DCAs
+R1 {
+    controlAction: Software.acc
+    type: provided
+    contexts: {
+        DCA1 [currentSpeed = lessDesiredSpeed, timeGap = greaterSafetyTimeGap]
+    }
+}
+R2 {
+    controlAction: Software.acc
+    type: not-provided
+    contexts: {
+        DCA2 [currentSpeed = greaterDesiredSpeed]
+    }
+}

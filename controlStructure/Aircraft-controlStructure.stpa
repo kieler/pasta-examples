@@ -1,0 +1,60 @@
+ControlStructure
+Aircraft {
+    FlightCrew {
+        processModel {
+            BCSUmode        : [on, off]
+            aircraftPosition: [docked, taxiing, takeoff, air, landing]
+        }
+        controlActions {
+            [mc "Manual Controls" ]-> OtherSubsystems
+            [powerOff "Power Off BSCU", powerOn "Power On BSCU"] -> BSCU 
+            [arm "Arm and set", disarm "Disarm"] -> AutobrakeController
+            [manual "Manual Braking"] -> Hydraulics
+        }
+    }
+    OtherSubsystems {
+        feedback {
+            [modes "Other system modes", states "states"] -> FlightCrew
+        }
+    }
+    BSCU {
+        processModel {
+            aircraftPosition: [docked, taxiing, takeoff, air, landing]
+        }
+        feedback {
+            [mode "BSCU mode", faults "BSCU faults"] -> FlightCrew 
+        }
+        AutobrakeController {
+            controlActions {
+                [brake "Brake cmd"] -> HydraulicController
+            }
+            feedback {
+                [mode "Autobrake mode"] -> FlightCrew
+            }
+        }
+        HydraulicController {
+            controlActions {
+                [valves "Open/close valves"] -> Hydraulics
+            }
+            feedback {
+                [brakeState "Manual braking state", speed "Wheel speed"] -> AutobrakeController
+            }
+        }
+    }
+    WheelBrakes {
+        controlActions {
+            [brake "Brake"] -> Wheels
+        }
+        Hydraulics {
+            feedback {
+                [mode "Braking mode"] -> FlightCrew
+            }
+        }
+    }
+    Wheels {
+        feedback {
+            [speed "Wheel speed"] -> HydraulicController
+        }
+    }    
+
+}

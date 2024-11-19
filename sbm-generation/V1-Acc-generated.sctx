@@ -1,0 +1,46 @@
+@LTL "G ((distance>=minDistance && distance<=safeDistance) -> (controlAction!=Controller.accelerate))", "Controller.accelerate not provided in context distance>=minDistance && distance<=safeDistance", "UCA1" 
+@LTL "G ((distance>=safeDistance && controlAction==Controller.accelerate) -> (X((!(distance>=safeDistance)) -> controlAction!=Controller.accelerate)))", "Controller.accelerate not applied too long in context distance>=safeDistance", "UCA4" 
+@LTL "G ((distance>=minDistance && distance<=safeDistance) -> (controlAction==Controller.decelerate))", "Controller.decelerate provided in context distance>=minDistance && distance<=safeDistance", "UCA5" 
+@LTL "((distance>=minDistance && distance<=safeDistance) -> (controlAction==Controller.decelerate)) && G ((!(distance>=minDistance && distance<=safeDistance)) -> (X((distance>=minDistance && distance<=safeDistance) -> (controlAction==Controller.decelerate))))", "Controller.decelerate not provided too late in context distance>=minDistance && distance<=safeDistance", "UCA6" 
+@LTL "G ((distance>=minDistance && distance<=safeDistance && controlAction==Controller.decelerate) -> (X((controlAction!=Controller.decelerate) -> (!(distance>=minDistance && distance<=safeDistance)))))", "Controller.decelerate not stopped too soon in context distance>=minDistance && distance<=safeDistance", "UCA7" 
+@LTL "G ((distance<=minDistance) -> (controlAction==Controller.stop))", "Controller.stop provided in context distance<=minDistance", "UCA8" 
+@LTL "((distance<=minDistance) -> (controlAction==Controller.stop)) && G ((!(distance<=minDistance)) -> (X((distance<=minDistance) -> (controlAction==Controller.stop))))", "Controller.stop not provided too late in context distance<=minDistance", "UCA9" 
+@LTL "G ((distance<=minDistance) -> (controlAction!=Controller.accelerate))", "Controller.accelerate not provided in context distance<=minDistance", "UCA2" 
+@LTL "G ((distance>=safeDistance) -> (controlAction==Controller.accelerate))", "Controller.accelerate provided in context distance>=safeDistance", "DCA1" 
+@LTL "G ((distance==safeDistance) -> (controlAction!=Controller.accelerate))", "Controller.accelerate not provided in context distance==safeDistance", "UCA3" 
+scchart SBM_Controller {
+
+enum ControlAction {accelerate, decelerate, stop, NULL}
+input int distance
+input int minDistance
+input int safeDistance
+ref ControlAction controlAction
+
+initial state NoAction {
+entry do controlAction = ControlAction.NULL
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance>=safeDistance go to accelerate_distanceGreaterOrEqualTosafeDistance
+if distance<=minDistance go to stop
+
+state stop {
+entry do controlAction = ControlAction.stop
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance>=safeDistance go to accelerate_distanceGreaterOrEqualTosafeDistance
+
+state accelerate_distanceGreaterOrEqualTosafeDistance "accelerate (distance>=safeDistance)" {
+entry do controlAction = ControlAction.accelerate
+}
+if distance>=minDistance && distance<=safeDistance go to decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance
+if distance<=minDistance go to stop
+if distance==safeDistance go to NoAction
+if !(distance>=safeDistance) go to NoAction
+
+state decelerate_distanceGreaterOrEqualTominDistanceAnddistanceLessOrEqualTosafeDistance "decelerate (distance>=minDistance && distance<=safeDistance)" {
+entry do controlAction = ControlAction.decelerate
+}
+if distance>=safeDistance && !(distance>=minDistance && distance<=safeDistance) go to accelerate_distanceGreaterOrEqualTosafeDistance
+if distance<=minDistance && !(distance>=minDistance && distance<=safeDistance) go to stop
+
+}

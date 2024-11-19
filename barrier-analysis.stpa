@@ -1,0 +1,132 @@
+Losses
+L1 "Loss of life or injury (traditional safety)"
+L2 "Economic loss (damage to vehicle or barrier)"
+L3 "Unauthorized acces"
+L4 "Authorized access not allowed"
+
+Hazards
+H1 "Barrier system damages authorized vehicle/persons" [L1, L2, L4]
+H2 "Barrier system doesnt stop unauthorized vehicle" [L3]
+H3 "Barrier system prevents authorized access" [L4]
+//H4 "Damage to barrier" 
+
+ControlStructure
+Barrier {
+    Human {
+        controlActions {
+            [open "Open Barrier", close "Close Barrier"] -> Computer
+            [clear "Clearance", inst "Instructions"] -> HumanDriver
+        }
+    }
+    Computer {
+        controlActions {
+            [opern "Open/Close", valves "Hydrauclic valves"] -> PhysicalBarrier
+        }
+        feedback {
+            [error ""] -> Human
+        }
+    }
+    HumanDriver {
+        controlActions {
+            [drive "Drive through", stop "Stop"] -> Vehicles
+        }
+        feedback {
+            [cred "Credentials"] -> Human
+        }
+    }
+    PhysicalBarrier {
+        feedback {
+            [error "", state "", objects ""] -> Computer
+            [open "Barrier open/closed", visual "visual"] -> HumanDriver
+        }
+    }
+    Vehicles {
+        feedback {
+            [error ""] -> HumanDriver
+        }
+    }
+}
+
+UCAs
+Human.open {
+    notProviding {
+        UCA1 "Operator does not provide Open Cmd when vehicle has ben authorized" [H3]
+        UCA2 "when authorized vehicle attepmts to drive through" [H1]
+    }     
+    providing {
+        UCA3 "vehicle has not been authorized" [H2]
+        //UCA3 "when there is no vehicle" [H2]
+    }     
+    tooEarly/Late {
+        UCA4 "too late after vehicle has been authorized" [H1, H3]
+        UCA5 "too early before authorization is given" [H2]
+    }
+    stoppedTooSoon {
+        UCA6 "continues providing Ope CMd after barrier is open or after vehicle passes through" [H2]
+        UCA7 "stops providing Open Cmd before barrier fully open when vehicle is authorized" [H1, H2, H3]
+    }
+}
+Human.close {
+    notProviding {
+        UCA8 "when vehicle has passed" [H2]
+        UCA9 "when vehicle is unauthorized" [H2]
+    }     
+    providing {
+        UCA10 "when authorized vehicle has partially passed through" [H1, H3]
+        UCA11 "when vehicle is authorized" [H3]
+    }     
+    tooEarly/Late {
+        UCA12 "too late (>0s) after unauthorized vehicle has entered" [H2]
+        UCA13 "too early before authorized vehicle has fully passed" [H1, H3]
+    }
+    stoppedTooSoon {
+        UCA14 "continues providing after barrier is closed" [H3]
+        UCA15 "stops providing too soon before barrier is fully closed for unauthorized vehicle" [H1, H2]
+    }
+}
+HumanDriver.drive {
+    notProviding {
+        UCAD1 "when driver is authorized" [H3]
+    }     
+    providing {
+        UCAD2 "when barrier is closing" [H1]
+        UCAD3 "when barrier is closed" [H1]
+        UCAD4 "when barrier is opening" [H1]
+        UCAD5 "when driver not authorized" [H2]
+    }     
+    tooEarly/Late {
+        UCAD6 "too early before barrier is fully opened" [H1]
+    }
+    stoppedTooSoon {
+        UCAD7 "stopped before fully through" [H1]
+    }
+}
+HumanDriver.stop {
+    notProviding {
+        UCAS1 "when driver is closing, closed, opening" [H1]
+        UCAS2 "when driver is not authorized" [H3]
+    }     
+    providing {
+        UCAS3 "when barrier is open and driver is authorized" [H3]
+    }     
+    tooEarly/Late {
+        UCAS4 "too late when barrier is closing, closed, opening" [H1]
+    }
+    stoppedTooSoon {
+        UCAS5 "continues applying stop too long after authorized and barrier is open" [H3]
+    }
+}
+
+ControllerConstraints
+C1 "Operators must provide Open cmd once vehicle has been authorized" [UCA1]
+C2 "" [UCA7]
+C3 "" [UCA13]
+C4 "" [UCA4]
+
+LossScenarios
+Scenario1 for UCA9 "operator did not immediately provide close cmd for unauthorized vehicle because the previous authorized vehicle passed through quicker than usual"
+Scenario2 for UCA9 "Operator did not immediately provide the close cmd for unauthorized vehicle because he was interrupted and forgot it had not been closed"
+Scenario3 for UCA13 "Operator provided the Close cmd too early before authorized vehicle was clear because he had learned to compensate for delayed system response"
+
+Scenario4 for UCAD2 "Driver drives thorugh barrier when it is closing because driver believes the barrier is open"
+Scenario5 for UCAD3 "Driver drives through barrier when it is closed because the driver cant see the barrier"
