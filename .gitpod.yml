@@ -1,0 +1,11 @@
+image: gitpod/workspace-node
+
+tasks:
+  - name: Clone Examples
+    init: git clone https://github.com/kieler/pasta-examples.git pasta-examples --branch main
+    command: exit
+
+vscode: 
+  extensions:
+    - kieler.pasta
+    - kieler.klighd-vscode

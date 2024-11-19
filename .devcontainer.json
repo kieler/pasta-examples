@@ -1,0 +1,13 @@
+{
+  "customizations": {
+    "codespaces": {
+      "openFiles": []
+    },
+    "vscode": {
+      "extensions": [
+        "kieler.pasta",
+        "kieler.klighd-vscode"
+      ]
+    }
+  }
+}
