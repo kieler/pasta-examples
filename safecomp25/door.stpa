@@ -1,0 +1,62 @@
+Losses
+L1 "Injury of people"
+L2 "Loss of customer satisfaction"
+
+Hazards
+H1 "Train is driving with open doors" [L1]
+H2 "Train is not opening doors at station" [L2]
+
+SystemConstraints
+SC1 "Train must not drive with open doors" [H1]
+SC2 "Train must open doors at station" [H2]
+
+ControlStructure
+CS {
+    Controller {
+        processModel {
+            trainSpeed: [null, aboveNull]
+            trainPosition: [atStation, betweenStations]
+            doorState: [open, closed]
+        }
+        controlActions {
+            [open "open", close "close"] -> Door
+        }
+    }
+    Door {
+    }
+}
+
+Responsibilities
+Controller {
+    R1 "Close doors before starting to drive" [SC1]
+    R2 "Open doors when arriving at station" [SC2]
+}
+Door {
+    // R3 "Close doors when commanded" [SC1]
+    // R4 "Open doors when commanded" [SC2]
+}
+
+Context-Table
+RL1 {
+    controlAction: Controller.open
+    type: provided
+    contexts: {
+        UCA1 [trainSpeed = aboveNull] [H1]
+    }
+}
+RL2 {
+    controlAction: Controller.open
+    type: not-provided
+    contexts: {
+        UCA2 [trainSpeed = null, trainPosition=atStation] [H2]
+    }
+}
+
+ControllerConstraints
+C1 "Controller must not provided the control action 'open', while trainSpeed is aboveNull." [UCA1]
+C2 "Controller must provide the control action 'open', while trainSpeed is null, and trainPosition is atStation." [UCA2]
+
+LossScenarios
+Scenario1 for UCA1 "Controller provided the control action 'open', while trainSpeed was aboveNull, because the controller incorrectly believes that the train has stopped."
+
+Scenario2 "Actuator for the door malfunctioned, causing the door to not open when the train arrived at the station." [H2]
