@@ -66,8 +66,8 @@ FlightCrew.powerOff {
     providing {
         UCA2 "Crew provides BSCU Power Off when Anti-Skid functionality is needed and WBS is functioning normally" [H2.1]
     }
-    tooEarly/Late {}
-    stoppedTooSoon {}
+    tooEarlyOrLateOrWrongOrder {}
+    stoppedTooSoonOrLate {}
 }
 
 ControllerConstraints

@@ -57,11 +57,11 @@ Human.open {
         UCA3 "vehicle has not been authorized" [H2]
         //UCA3 "when there is no vehicle" [H2]
     }     
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA4 "too late after vehicle has been authorized" [H1, H3]
         UCA5 "too early before authorization is given" [H2]
     }
-    stoppedTooSoon {
+    stoppedTooSoonOrLate {
         UCA6 "continues providing Ope CMd after barrier is open or after vehicle passes through" [H2]
         UCA7 "stops providing Open Cmd before barrier fully open when vehicle is authorized" [H1, H2, H3]
     }
@@ -75,11 +75,11 @@ Human.close {
         UCA10 "when authorized vehicle has partially passed through" [H1, H3]
         UCA11 "when vehicle is authorized" [H3]
     }     
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA12 "too late (>0s) after unauthorized vehicle has entered" [H2]
         UCA13 "too early before authorized vehicle has fully passed" [H1, H3]
     }
-    stoppedTooSoon {
+    stoppedTooSoonOrLate {
         UCA14 "continues providing after barrier is closed" [H3]
         UCA15 "stops providing too soon before barrier is fully closed for unauthorized vehicle" [H1, H2]
     }
@@ -94,10 +94,10 @@ HumanDriver.drive {
         UCAD4 "when barrier is opening" [H1]
         UCAD5 "when driver not authorized" [H2]
     }     
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCAD6 "too early before barrier is fully opened" [H1]
     }
-    stoppedTooSoon {
+    stoppedTooSoonOrLate {
         UCAD7 "stopped before fully through" [H1]
     }
 }
@@ -109,11 +109,11 @@ HumanDriver.stop {
     providing {
         UCAS3 "when barrier is open and driver is authorized" [H3]
     }     
-    tooEarly/Late {
-        UCAS4 "too late when barrier is closing, closed, opening" [H1]
+    tooEarlyOrLateOrWrongOrder {
+        UCA26 "too late when barrier is closing, closed, opening" [H1]
     }
-    stoppedTooSoon {
-        UCAS5 "continues applying stop too long after authorized and barrier is open" [H3]
+    stoppedTooSoonOrLate {
+        UCA27 "continues applying stop too long after authorized and barrier is open" [H3]
     }
 }
 

@@ -115,14 +115,14 @@ Admin.sw {
         UCA1 "Admin gave the SW to user, without some form of safety deposit" [H2]
         UCA2 "Admin gave the SW to user without properly explaining the correct way of operating it" [H2, H3]
     }     
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA5 "Admin gave the SW to the user before making sure that the UAV is ready for its mission (e.g., the battery is full, the life ring is mounted, the engine motors are working)." [H1, H3, H4, H5]
         UCA6 "admin gave the SW to a user before checking that the SW is ready for use (e.g., it's operating correctly, the SIM card is installed)" [H1, H3]
         UCA7 "admin gave the SW to the user before setting up the approved numbers." [H1, H3]
         UCA8 "Admin gave the SW to the user before setting up the supervised area borders." [H1, H3]
         UCA9 "Admin gave the SW to the user before checking that the ground station equipment is operating correctly (e.g. The tablet is charged, the laptop is open, the software has been set up)" [H1, H3, H5]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.explain {
@@ -130,8 +130,8 @@ Admin.explain {
         UCA10 "In every case" [H2, H3] 
     }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon {
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate {
         UCA11 "Admin stopped the explanation of the operation of the SW, before it was completed." [H2, H3]
     }
 }
@@ -142,8 +142,8 @@ Admin.activateSW {
         UCA13 "Admin did not check that the SW was operating correctly, after it had been returned by a user." [H1, H2, H3]
     }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon {
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate {
         UCA14 "admin stopped the execution of the command “Turn on the SW and check that it operates correctly” before it was completed, while it was malfunctioning." [H1, H2, H3]
     }
 }
@@ -153,8 +153,8 @@ Admin.checkSWBattery {
        UCA15 "Admin did not check the battery level of the SW, while it was not enough to complete the mission." [H1, H2, H3]
     }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon {
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate {
         UCA16 "admin gave the SW to the user, before the level of the battery reached the level that would allow for mission completion." [H1, H2, H3]
     }
 }
@@ -164,15 +164,15 @@ Admin.checkSWCredit {
         UCA17 "admin did not check if the SW SIM card has enough balance and gave it to a user." [H1, H2, H3]
     }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon { }
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.openSWApp {
     notProviding { }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon { }
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkUAVBattery {
@@ -182,10 +182,10 @@ Admin.checkUAVBattery {
     providing {
         UCA18 "Admin put the battery in the charger, but the battery did not charge." [H1, H3, H4]
     }
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA20 "Admin charged the battery of the UAV after having given the SW to the users (the mission might begin while the UAV is not operating)." [H1, H3, H4]
     }
-    stoppedTooSoon {
+    stoppedTooSoonOrLate {
         UCA21 "Admin stopped charging the UAV’s battery, before it reached the required level of charging." [H1, H3, H4]
         UCA22 "admin did not check if the battery was discharged after the UAV ended its missions for the time being." [H1]
     }
@@ -202,8 +202,8 @@ Admin.checkUAVMechanicals {
         UCA29 "admin did not check the mechanical parts of the UAV, while one of the internal components was damaged/not working properly (gyroscope, altimeter, speedometer, accelerometer, obstacle avoidance system, compass)." [H1, H3, H4, H5] 
     }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon { }
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkRescueEquip {
@@ -213,10 +213,10 @@ Admin.checkRescueEquip {
         UCA32 "admin did not check the rescue equipment, while the life ring was not attached to the UAV." [H1, H5]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA33 "admin checked the rescue equipment before connecting the UAV with the Mission planner (when you connect the UAV to the MP, it opens the life ring release mechanism)." [H1, H5]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.connectUAVBattery {
@@ -224,8 +224,8 @@ Admin.connectUAVBattery {
         UCA34 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { }
-    stoppedTooSoon { }
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.UAVSafetyButton {
@@ -233,13 +233,13 @@ Admin.UAVSafetyButton {
         UCA35 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA36 "admin long pressed UAV safety button, after having given SW to users." [H1, H3]
         UCA37 "admin longed pressed the UAVs safety button before connecting it to Mission planner." [H1, H3]
         UCA38 "Admin long pressed the UAVs safety button, after running the script on Mission Planner." [H1, H3]
         UCA39 "Admin long pressed the UAVs safety button, before turning on the UAVs controller." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.open {
@@ -247,10 +247,10 @@ Admin.open {
         UCA40 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA41 "admin opened the laptop and tablet to check that they are working correctly, after giving the SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.connectDevices {
@@ -260,10 +260,10 @@ Admin.connectDevices {
     providing { 
         UCA42 "Admin connected the tablet to the laptop, while the laptop did not recognize the device." [H1, H3]
     }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA44 "Admin connected the tablet with the laptop after having given SWs to users." [H1, H3] 
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkBattery {
@@ -271,11 +271,11 @@ Admin.checkBattery {
         UCA45 "Admin did not check the laptop and tablet batteries, while one of them was not fully charged" [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA46 "Admin did not check the laptop and tablet batteries, while one of them was not charged and the mission had begun." [H1, H3]
         UCA47 "Admin checked the laptop and tablet batteries, after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.openSWApp {
@@ -283,10 +283,10 @@ Admin.openSWApp {
         UCA48 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA49 "Admin opened and set up the app on the tablet, after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkPrevScripts {
@@ -294,10 +294,10 @@ Admin.checkPrevScripts {
         UCA50 "Admin did not check if there is an old flight plan on the tablet and the laptop, while one was loaded." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA51 "Admin checked if here is an old flight plan on the tablet and the laptop after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkScriptLaptop {
@@ -306,10 +306,10 @@ Admin.checkScriptLaptop {
         UCA53 "Admin did not check if the values were set up correctly, while they were not." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA54 "Admin checked if the script is in the laptop and if the values are correct, after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkRFLink {
@@ -317,10 +317,10 @@ Admin.checkRFLink {
         UCA55 "Admin did not check if the RF link is working, while it was not." [H1, H3, H5]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA56 "Admin checked if the RF link works, after having given SW to users." [H1, H3, H5]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.openPlaner {
@@ -328,11 +328,11 @@ Admin.openPlaner {
         UCA57 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         // YCA58 O admin άνοιξε το Mission Planner και το σύνδεσε με το UAV after having given SW to users.
         UCA58 "Admin..." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkModes {
@@ -340,10 +340,10 @@ Admin.checkModes {
         UCA59 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA60 "Admin checked the modes, after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.scriptToMP {
@@ -353,13 +353,13 @@ Admin.scriptToMP {
     providing { 
         UCA61 "Admin uploaded the wrong script to the Mission Planner." [H1, H3]
     }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA63 "Admin had run the script on the Mission planner, after having given SW to users." [H1, H3]
         UCA64 "Admin had run the script on the Mission planner, before connecting the UAV with the Mission Planner." [H1, H3]
         UCA65 "Admin had run the script on the Mission planner, before connecting the UAV with its battery." [H1, H3]
         UCA66 "Admin had run the script on the Mission planner, before turning on the UAVs controller." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkRCBattery {
@@ -367,10 +367,10 @@ Admin.checkRCBattery {
         UCA67 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA68 "Admin checked the controller's battery, after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.activateRC {
@@ -378,11 +378,11 @@ Admin.activateRC {
         UCA69 "in any case." [H1, H3]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA70 "Admin turned on the UAV's controller, before connecting the UAV with the Mission Planner." [H1, H3]
         UCA71 "Admin turned on the UAV's controller after having given SW to users." [H1, H3]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 Admin.checkConnectivity {
@@ -390,10 +390,10 @@ Admin.checkConnectivity {
         UCA72 "Admin did not check connectivity status of the networks, while one of them had connectivity issues." [H1, H3, H5]
     }
     providing { }
-    tooEarly/Late { 
+    tooEarlyOrLateOrWrongOrder { 
         UCA73 "Admin checked the network connectivity, after having given SW to users." [H1, H3, H5]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 
@@ -407,8 +407,8 @@ Admin.rtl {
     providing {
         UCA74 "Admin gave the RTL command through Mission Planner, while the mission was being executed properly." [H3, H5]
     }
-    tooEarly/Late { }
-    stoppedTooSoon { }
+    tooEarlyOrLateOrWrongOrder { }
+    stoppedTooSoonOrLate { }
 }
 
 UAV.lifeRing {
@@ -421,11 +421,11 @@ UAV.lifeRing {
         UCA80 "Pixhawk Controller gave the control action “Drop the life ring”, while the release mechanism was malfunctioning/ was broken." [H1, H4, H5]
         UCA81 "Pixhawk Controller gave the control action “Drop the life ring”, while the user had pressed the CANCEL command." [H4]  
     }
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA83 "Pixhawk Controller gave the control action “Drop the life ring”, before the UAV reached the users coordinates." [H3, H4] 
         UCA84 "Pixhawk Controller gave the control action “Drop the life ring”, before the UAV descended on the correct height." [H3, H4, H5]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 GroundStation.cancel {
@@ -435,10 +435,10 @@ GroundStation.cancel {
     providing {
         UCA85 "Ground station sent the command cancel, while the user had not pressed the cancel button." [H3, H5]
     }
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA87 "Ground station sent the command cancel, after the UAV had released the life ring." [H4]
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 GroundStation.trajectory {
@@ -457,11 +457,11 @@ GroundStation.trajectory {
         UCA96 "ground station executed the send the flight plan to UAV command, while there were obstacles in the flight path." [H1, H2]
         UCA97 "ground station executed the send the flight plan to UAV command, while the weather conditions were adverse for flying." [H1, H2]
     }
-    tooEarly/Late {
+    tooEarlyOrLateOrWrongOrder {
         UCA99 "ground station executed the send the flight plan to UAV command, after the coordinates update has stopped and the user had changed position." [H3]
         UCA100 "ground station executed the send the flight plan to UAV command, before the life ring has been mounted on the UAV." [H1, H5] 
     }
-    stoppedTooSoon { }
+    stoppedTooSoonOrLate { }
 }
 
 
