@@ -1,0 +1,194 @@
+Losses
+L01 "Vehicle is damaged"
+L02 "Loss of life or injury to people"
+
+Hazards
+H01 "Vehicle does not keep a minimum distance" [L01, L02]
+
+SystemConstraints
+SC01 "Vehicle must satisfy minimum distance" [H01]
+
+
+ControlStructure
+ACC {
+    Controller {
+        processModel {
+            dist:   [stopDist=[MIN, minDist],
+                        decDist=(minDist, desiredDist), 
+                        okDist=[desiredDist], 
+                        accDist=(desiredDist, MAX]]
+        }
+        controlActions {
+            [accelerate "accelerate", decelerate "decelerate", stop "stop"] -> Vehicle
+        }
+    }
+    Vehicle {
+        feedback {
+            [speed "speed", distance "distance"] -> Controller
+        }
+    }
+}
+
+Responsibilities 
+Controller {
+    R01 "Decelerate when other vehicles are too close to keep a safe distance" [SC01]
+    R02 "Stop when minimum distance to other vehicle is violated" [SC01]
+}
+Vehicle {
+    R03 "Stop when commanded" [SC01]
+}
+
+Context-Table
+RL01 {
+    controlAction: Controller.accelerate
+    type: provided
+    contexts: {
+        UCA01 [dist = decDist] [H01]
+        UCA02 [dist = stopDist] [H01]
+        UCA03 [dist = okDist] [H01]
+    }
+}
+RL02 {
+    controlAction: Controller.accelerate
+    type: too-early
+    contexts: {
+        UCA04 [dist = accDist] [H01]
+    }
+}
+RL03 {
+    controlAction: Controller.accelerate
+    type: applied-too-long
+    contexts: {
+        UCA05 [dist = accDist] [H01]
+    }
+}
+RL04 {
+    controlAction: Controller.decelerate
+    type: not-provided
+    contexts: {
+        UCA06 [dist = decDist] [H01]
+    }
+}
+RL05 {
+    controlAction: Controller.decelerate
+    type: too-late
+    contexts: {
+        UCA07 [dist = decDist] [H01]
+    }
+}
+RL06 {
+    controlAction: Controller.decelerate
+    type: stopped-too-soon
+    contexts: {
+        UCA08 [dist = decDist] [H01]
+    }
+}
+RL07 {
+    controlAction: Controller.stop
+    type: not-provided
+    contexts: {
+        UCA09 [dist = stopDist] [H01]
+    }
+}
+RL08 {
+    controlAction: Controller.stop
+    type: too-late
+    contexts: {
+        UCA10 [dist = stopDist] [H01]
+    }
+}
+// RL8 {
+//     controlAction: Controller.accelerate
+//     type: not-provided
+//     contexts: {
+//         UCA11 [distance = accDist] [H2]
+//     }
+// }
+// RL9 {
+//     controlAction: Controller.decelerate
+//     type: provided
+//     contexts: {
+//         UCA12 [distance = accDist] [H2]
+//     }
+// }
+// RL10 {
+//     controlAction: Controller.stop
+//     type: provided
+//     contexts: {
+//         UCA13 [distance = accDist] [H2]
+//         UCA14 [distance = decDist] [H2]
+//     }
+// }
+
+DCAs
+DRL1 {
+    controlAction: Controller.accelerate
+    type: provided
+    contexts: {
+        DCA01 [dist = accDist] 
+    }
+}
+DRL2 {
+    controlAction: Controller.decelerate
+    type: not-provided
+    contexts: {
+        DCA02 [dist = accDist] 
+    }
+}
+DRL3 {
+    controlAction: Controller.stop
+    type: not-provided
+    contexts: {
+        DCA03 [dist = accDist] 
+        DCA04 [dist = decDist]
+    }
+}
+
+ControllerConstraints
+C01 "Controller must not provide the control action 'accelerate', while dist is decDist." [UCA01]
+C02 "Controller must not provide the control action 'accelerate', while dist is stopDist." [UCA02]
+C03 "Controller must not provide the control action 'accelerate', while dist is okDist." [UCA03]
+C04 "Controller must not provide the control action 'accelerate' before dist is accDist." [UCA04]
+C05 "Controller must not apply the control action 'accelerate' too long, while dist is accDist." [UCA05]
+C06 "Controller must provide the control action 'decelerate', while dist is decDist." [UCA06]
+C07 "Controller must provide the control action 'decelerate' in time, while dist is decDist." [UCA07]
+C08 "Controller must not stop the control action 'decelerate' too soon, while dist is decDist." [UCA08]
+C09 "Controller must provide the control action 'stop', while dist is stopDist." [UCA09]
+C10 "Controller must provide the control action 'stop' in time, while dist is stopDist." [UCA10]
+
+
+LossScenarios
+// accelerate
+Scenario01 <wrongProcessModel> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because Controller incorrectly believes that distance is accDist."
+Scenario02 <changesOverTime> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor deteriorated over time leading to false measurment of the current distance."
+Scenario03 <componentFailure> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor broke."
+Scenario04 <delayedFeedback> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the current distance is sent too late from the distance sensor."
+Scenario05 <inadequateControlAlgorithm> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the control algorithm did not calculate the safe distance correctly."
+Scenario06 <incorrectInformationProvided> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor malfuntioned and sent the wrong distance value."
+Scenario07 <incorrectInformationProvided> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor relocated leading to a wrong distance value."
+Scenario08 <missingFeedback> for UCA01 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor did not sent any value."
+Scenario09 <delayedOperation> for UCA05 "Controller applied the control action 'accelerate' too long, while dist was accDist. Because the calculation of the safe distance and hence the determination of the next control action is taking too long."
+Scenario10 <inadequateControlAlgorithm> for UCA04 "Controller provided the control action 'accelerate' too early, while dist was accDist. Because the calculation of the safe distance is inaccurate."
+Scenario11 "Motor of the vehicle malfunctions, causing the vehicle to accelerate uncontrollably." [H01]
+
+// decelerate
+Scenario12 <changesOverTime> for UCA06 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the measurment of the distance sensor got imprecise."
+Scenario13 <componentFailure> for UCA06 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the motor actuator malfunctioned and hence the action could not be executed."
+Scenario14 <componentFailure> for UCA06 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the controller had not enough power to determine and sent an action."
+Scenario15 <delayedOperation> for UCA07 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the determination of the correct control action is taking too long."
+Scenario16 <delayedFeedback> for UCA07 "Controller provided the control action 'decelerate' too late, while dist was decDist. Because the current distance is sent too late from the distance sensor."
+Scenario17 <measurementInaccurate> for UCA08 "Controller stopped the control action 'decelerate' too soon, while dist was decDist. Because the distance sensor sent an inaccurate value."
+
+// stop
+Scenario18 <wrongProcessModel> for UCA09 "Controller did not provide the control action 'stop', while dist was stopDist. Because Controller incorrectly believes that distance is decDist"
+Scenario19 <delayedFeedback> for UCA10 "Controller provided the control action 'stop' too late, while dist was stopDist. Because the current distance is sent too late from the distance sensor."
+
+SafetyRequirements
+SR01 "Communication between sensor and controller must be sufficiently fast and reliable" [Scenario01, Scenario04, Scenario16, Scenario19]
+SR02 "Distance sensore must be checked regularly to prevent malfunction and deterioration" [Scenario02, Scenario03, Scenario06, Scenario08]
+SR03 "The control algorithm of the controller must be verified thoroughly" [Scenario05, Scenario10]
+SR04 "The distance sensor must be prevented form relocation" [Scenario07]
+SR05 "The control algorithm must be fast enough to sent control actions in time" [Scenario09, Scenario15]
+SR06 "Motor functionality must be checked regularly." [Scenario11, Scenario13]
+SR07 "Power supply of the controller must be stable at all time" [Scenario14]
+SR08 "Distance sensor must be calibrated regularly to prevent inaccurate measurement" [Scenario17, Scenario12, Scenario18]

@@ -1,0 +1,53 @@
+@LTL "X(G ((dist>minDist && dist<desiredDist) -> (controlAction!=Controller.accelerate)))", "Controller.accelerate not provided in context dist>minDist && dist<desiredDist", "UCA01" 
+@LTL "X(G ((dist<=minDist) -> (controlAction!=Controller.accelerate)))", "Controller.accelerate not provided in context dist<=minDist", "UCA02" 
+@LTL "X(G ((dist==desiredDist) -> (controlAction!=Controller.accelerate)))", "Controller.accelerate not provided in context dist==desiredDist", "UCA03" 
+@LTL "X(G ((!(dist>desiredDist) && X(dist>desiredDist)) -> (controlAction!=Controller.accelerate)))", "Controller.accelerate not provided too early in context dist>desiredDist", "UCA04" 
+@LTL "X(G ((dist>desiredDist && controlAction==Controller.accelerate) -> (X((!(dist>desiredDist)) -> controlAction!=Controller.accelerate))))", "Controller.accelerate not applied too long in context dist>desiredDist", "UCA05" 
+@LTL "X(G ((dist>minDist && dist<desiredDist) -> (controlAction==Controller.decelerate)))", "Controller.decelerate provided in context dist>minDist && dist<desiredDist", "UCA06" 
+@LTL "X(((dist>minDist && dist<desiredDist) -> (controlAction==Controller.decelerate)) && G ((!(dist>minDist && dist<desiredDist)) -> (X((dist>minDist && dist<desiredDist) -> (controlAction==Controller.decelerate)))))", "Controller.decelerate not provided too late in context dist>minDist && dist<desiredDist", "UCA07" 
+@LTL "X(G ((dist>minDist && dist<desiredDist && controlAction==Controller.decelerate) -> (X((controlAction!=Controller.decelerate) -> (!(dist>minDist && dist<desiredDist))))))", "Controller.decelerate not stopped too soon in context dist>minDist && dist<desiredDist", "UCA08" 
+@LTL "X(G ((dist<=minDist) -> (controlAction==Controller.stop)))", "Controller.stop provided in context dist<=minDist", "UCA09" 
+@LTL "X(((dist<=minDist) -> (controlAction==Controller.stop)) && G ((!(dist<=minDist)) -> (X((dist<=minDist) -> (controlAction==Controller.stop)))))", "Controller.stop not provided too late in context dist<=minDist", "UCA10" 
+@LTL "X(G ((dist>desiredDist) -> (controlAction==Controller.accelerate)))", "Controller.accelerate provided in context dist>desiredDist", "DCA01" 
+@LTL "X(G ((dist>desiredDist) -> (controlAction!=Controller.decelerate)))", "Controller.decelerate not provided in context dist>desiredDist", "DCA02" 
+@LTL "X(G ((dist>desiredDist) -> (controlAction!=Controller.stop)))", "Controller.stop not provided in context dist>desiredDist", "DCA03" 
+@LTL "X(G ((dist>minDist && dist<desiredDist) -> (controlAction!=Controller.stop)))", "Controller.stop not provided in context dist>minDist && dist<desiredDist", "DCA04" 
+scchart SBM_Controller {
+
+enum Controller {accelerate, decelerate, stop, NULL}
+@AssumeRange 0,1000
+input int dist
+@AssumeRange 7,7
+input int minDist
+@AssumeRange 7,1000
+input int desiredDist
+ref Controller controlAction
+
+initial state NoAction {
+entry do controlAction = Controller.NULL
+}
+if dist>minDist && dist<desiredDist go to decelerate_distGreaterThanminDistAnddistLessThandesiredDist
+if dist>desiredDist go to accelerate_distGreaterThandesiredDist
+if dist<=minDist go to stop
+
+state stop {
+entry do controlAction = Controller.stop
+}
+if dist>minDist && dist<desiredDist go to decelerate_distGreaterThanminDistAnddistLessThandesiredDist
+if dist>desiredDist go to accelerate_distGreaterThandesiredDist
+
+state accelerate_distGreaterThandesiredDist "accelerate (dist>desiredDist)" {
+entry do controlAction = Controller.accelerate
+}
+if dist>minDist && dist<desiredDist go to decelerate_distGreaterThanminDistAnddistLessThandesiredDist
+if dist<=minDist go to stop
+if dist==desiredDist go to NoAction
+if !(dist>desiredDist) go to NoAction
+
+state decelerate_distGreaterThanminDistAnddistLessThandesiredDist "decelerate (dist>minDist && dist<desiredDist)" {
+entry do controlAction = Controller.decelerate
+}
+if dist>desiredDist && !(dist>minDist && dist<desiredDist) go to accelerate_distGreaterThandesiredDist
+if dist<=minDist && !(dist>minDist && dist<desiredDist) go to stop
+
+}
