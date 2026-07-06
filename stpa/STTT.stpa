@@ -1,0 +1,270 @@
+Losses
+L1 "Injury of passengers"
+L2 "Damage to vehicle"
+
+Hazards
+H1 "Vehicle approaches the other one too fast" [L1, L2]
+H2 "Vehicle moves while docked to other vehicle" [L2]
+H3 "Vehicle tries to dock without establishing a proper state first" [L1, L2]
+
+SystemConstraints
+SC1 "Vehicle must slow down when approaching another vehicle" [H1]
+SC2 "Vehicle must not move when docked to other vehicle" [H2]
+SC3 "Vehicle must be stand still and other vehicle must be in reasonable distance before initiating docking maneuvor" [H3]
+
+ControlStructure
+Train {
+    Software {
+        processModel {
+            // direction: [forward, backward]
+            distToVehicle: [decDist=(dockDist,approachDist), stopDist=[MIN, dockDist], drivingDist=[approachDist, MAX]]
+            speed: [aboveDesired=(desiredSpeed, MAX], desired=[desiredSpeed], driving=(decSpeed, desiredSpeed), approaching=[decSpeed], underApproaching=(0, decSpeed), stopped=[0]]
+            otherDocked: [yes=[true], no=[false]]
+            selfDocked: [yes=[true], no=[false]]
+            contact: [yes=[true], no=[false]]
+            // state: [driving, docking]
+            dockedTime: [enough=[dockingTime, MAX], notEnough=[MIN, dockingTime)]
+        }
+        controlActions {
+            [acc "accelerate", dec "decelerate", stop "stop", rev "reverse"] -> Motor
+            [dock "dock to other vehicle", undock "undock from other vehicle"] -> Docking_Mechanism
+        }
+    }
+    Motor {
+        feedback {
+            [speed "speed"] -> Software
+        }
+    }
+    Docking_Mechanism {
+        feedback {
+            [docked "docked?"] -> Software
+        }
+    }
+    BumpSensor {
+        feedback {
+            [touch "Contact other vehicle?"] -> Software
+        }
+    }
+    UltrasonicSensor {
+        feedback {
+            [dist "distance to other vehicle"] -> Software
+        }
+    }
+    DockSensor {
+        feedback {
+            [docked "Other vehicle docked?"] -> Software
+        }
+    }
+}
+
+Responsibilities
+Software {
+    R01 "Decelerate when approaching other vehicle" [SC1]
+    R02 "Dont move while docked to other vehicle" [SC2]
+    R03 "Only open doors when properly docked to other vehicle" [SC3]
+}
+Motor {
+    R04 "Decelerate when commanded" [SC1]
+    R05 "Stop when commanded" [SC2]
+}
+
+Context-Table
+RL01 {
+    controlAction: Software.acc
+    type: provided
+    contexts: {
+        UCA01 [distToVehicle=decDist, speed = approaching] [H1]
+        UCA02 [distToVehicle=decDist, speed = driving] [H1]
+        UCA03 [distToVehicle=stopDist] [H1]
+        UCA04 [otherDocked=yes] [H2]
+        UCA05 [selfDocked=yes] [H2]
+    }
+}
+RL02 {
+    controlAction: Software.dec
+    type: not-provided
+    contexts: {
+        UCA06 [distToVehicle=decDist, contact=no, speed=driving] [H1]
+        UCA07 [distToVehicle=decDist, contact=no, speed=desired] [H1]
+    }
+}
+RL03 {
+    controlAction: Software.dec
+    type: too-late
+    contexts: {
+        UCA08 [distToVehicle=decDist, contact=no, speed=driving] [H1]
+        UCA09 [distToVehicle=decDist, contact=no, speed=desired] [H1]
+    }
+}
+RL04 {
+    controlAction: Software.dec
+    type: stopped-too-soon
+    contexts: {
+        UCA10 [distToVehicle=decDist, contact=no, speed=driving] [H1]
+        UCA11 [distToVehicle=decDist, contact=no, speed=desired] [H1]
+    }
+}
+RL05 {
+    controlAction: Software.stop
+    type: not-provided
+    contexts: {
+        UCA12 [distToVehicle=stopDist, speed=approaching] [H1]
+        UCA13 [distToVehicle=stopDist, speed=underApproaching] [H1]
+        UCA14 [distToVehicle=stopDist, speed=driving] [H1]
+        UCA15 [distToVehicle=stopDist, speed=desired] [H1]
+        UCA16 [distToVehicle=stopDist, speed=aboveDesired] [H1]
+        UCA17 [contact = yes, speed=approaching] [H1]
+        UCA18 [contact = yes, speed=underApproaching] [H1]
+    }
+}
+RL06 {
+    controlAction: Software.stop
+    type: too-late
+    contexts: {
+        UCA19 [distToVehicle=stopDist, speed=approaching] [H1]
+        UCA20 [distToVehicle=stopDist, speed=underApproaching] [H1]
+        UCA21 [distToVehicle=stopDist, speed=driving] [H1]
+        UCA22 [distToVehicle=stopDist, speed=desired] [H1]
+        UCA23 [distToVehicle=stopDist, speed=aboveDesired] [H1]
+        UCA24 [contact = yes, speed=approaching] [H1]
+        UCA25 [contact = yes, speed=underApproaching] [H1]
+    }
+}
+RL07 {
+    controlAction: Software.dock
+    type: provided
+    contexts: {
+        UCA26 [speed=driving] [H3]
+        UCA27 [speed=approaching] [H3]
+        UCA28 [distToVehicle=decDist] [H3]
+        UCA29 [distToVehicle=drivingDist] [H3]
+        UCA30 [contact=no] [H3]
+    }
+}
+
+DCAs
+DRL01 {
+    controlAction: Software.acc
+    type: provided
+    contexts: {
+        DCA01 [distToVehicle=drivingDist, speed=stopped, otherDocked=no, selfDocked=no, contact=no]
+        DCA02 [distToVehicle=drivingDist, speed=approaching, otherDocked=no, selfDocked=no, contact=no]
+        DCA03 [distToVehicle=drivingDist, speed=driving, otherDocked=no, selfDocked=no, contact=no]
+        DCA04 [distToVehicle=drivingDist, speed=underApproaching, otherDocked=no, selfDocked=no, contact=no]
+        DCA05 [distToVehicle=decDist, speed = stopped, otherDocked=no, selfDocked=no, contact=no]
+    }
+}
+DRL02 {
+    controlAction: Software.dec
+    type: provided
+    contexts: {
+        DCA06 [distToVehicle=decDist, speed=driving, contact=no]
+        DCA07 [distToVehicle=decDist, speed=desired, contact=no]
+        DCA08 [distToVehicle=decDist, speed = aboveDesired, contact=no]
+        DCA09 [distToVehicle=drivingDist, speed = aboveDesired, contact=no]
+    }
+}
+DRL03 {
+    controlAction: Software.dec
+    type: not-provided
+    contexts: {
+        DCA10 [speed=approaching, distToVehicle=decDist]
+    }
+}
+DRL04 {
+    controlAction: Software.dock
+    type: provided
+    contexts: {
+        DCA11 [contact=yes, selfDocked=no, dockedTime=notEnough, speed=stopped, distToVehicle=stopDist]
+    }
+}
+DRL05 {
+    controlAction: Software.undock
+    type: provided
+    contexts: {
+        DCA12 [selfDocked = yes, dockedTime=enough, speed=stopped]
+    }
+}
+DRL06 {
+    controlAction: Software.rev
+    type: provided
+    contexts: {
+        DCA13 [selfDocked = no, otherDocked=no, dockedTime=enough, speed=stopped, distToVehicle=stopDist]
+    }
+}
+
+ControllerConstraints
+C01 "Software must not provide the control action 'accelerate', while  distToVehicle is decDist, and speed is approaching." [UCA01]
+C02 "Software must not provide the control action 'accelerate', while  distToVehicle is decDist, and speed is driving." [UCA02]
+C03 "Software must not provide the control action 'accelerate', while  distToVehicle is stopDist." [UCA03]
+C04 "Software must not provide the control action 'accelerate', while  otherDocked is yes." [UCA04]
+C05 "Software must not provide the control action 'accelerate', while  selfDocked is yes." [UCA05]
+C06 "Software must provide the control action 'decelerate', while  distToVehicle is decDist, contact is no, and speed is driving." [UCA06]
+C07 "Software must provide the control action 'decelerate', while  distToVehicle is decDist, contact is no, and speed is desired." [UCA07]
+C08 "Software must provide the control action 'decelerate' in time, while  distToVehicle is decDist, contact is no, and speed is driving." [UCA08]
+C09 "Software must provide the control action 'decelerate' in time, while  distToVehicle is decDist, contact is no, and speed is desired." [UCA09]
+C10 "Software must not stop the control action 'decelerate' too soon, while  distToVehicle is decDist, contact is no, and speed is driving." [UCA10]
+C11 "Software must not stop the control action 'decelerate' too soon, while  distToVehicle is decDist, contact is no, and speed is desired." [UCA11]
+C12 "Software must provide the control action 'stop', while  distToVehicle is stopDist, and speed is approaching." [UCA12]
+C13 "Software must provide the control action 'stop', while  distToVehicle is stopDist, and speed is underApproaching." [UCA13]
+C14 "Software must provide the control action 'stop', while  distToVehicle is stopDist, and speed is driving." [UCA14]
+C15 "Software must provide the control action 'stop', while  distToVehicle is stopDist, and speed is desired." [UCA15]
+C16 "Software must provide the control action 'stop', while  distToVehicle is stopDist, and speed is aboveDesired." [UCA16]
+C17 "Software must provide the control action 'stop', while  contact is yes, and speed is approaching." [UCA17]
+C18 "Software must provide the control action 'stop', while  contact is yes, and speed is underApproaching." [UCA18]
+C19 "Software must provide the control action 'stop' in time, while  distToVehicle is stopDist, and speed is approaching." [UCA19]
+C20 "Software must provide the control action 'stop' in time, while  distToVehicle is stopDist, and speed is underApproaching." [UCA20]
+C21 "Software must provide the control action 'stop' in time, while  distToVehicle is stopDist, and speed is driving." [UCA21]
+C22 "Software must provide the control action 'stop' in time, while  distToVehicle is stopDist, and speed is desired." [UCA22]
+C23 "Software must provide the control action 'stop' in time, while  distToVehicle is stopDist, and speed is aboveDesired." [UCA23]
+C24 "Software must provide the control action 'stop' in time, while  contact is yes, and speed is approaching." [UCA24]
+C25 "Software must provide the control action 'stop' in time, while  contact is yes, and speed is underApproaching." [UCA25]
+C26 "Software must not provide the control action 'dock to other vehicle', while  speed is driving." [UCA26]
+C27 "Software must not provide the control action 'dock to other vehicle', while  speed is approaching." [UCA27]
+C28 "Software must not provide the control action 'dock to other vehicle', while  distToVehicle is decDist." [UCA28]
+C29 "Software must not provide the control action 'dock to other vehicle', while  distToVehicle is drivingDist." [UCA29]
+C30 "Software must not provide the control action 'dock to other vehicle', while  contact is no." [UCA30]
+
+
+
+LossScenarios
+Scenario01 <WrongProcessModel> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because it incorrectly believes that the distance is larger."
+Scenario02 <DelayedFeedback> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because the feedback from the distance sensor was received with delay."
+Scenario03 <MeasurementInaccurate> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because the distance sensor deteriorated over time leading to false measurment of the current distance."
+Scenario04 <IncorrectInformationProvided> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because the distance sensor malfuntioned and sent the wrong distance value."
+Scenario05 <MeasurementInaccurate> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because the distance sensor relocated leading to a wrong distance value."
+Scenario06 <MissingFeedback> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because the distance sensor failed and sent no update."
+Scenario07 <InadequateControlAlgorithm> for UCA01 "Software provided the control action 'accelerate', while distToVehicle was approachDist, and speed was driving. Because it incorrectly determines when the distance becomes the approaching distance."
+Scenario08 <WrongProcessModel> for UCA03 "Software provided the control action 'accelerate', while distToVehicle was stopDist. Because it incorrectly believes that the driving direction was already changed."
+Scenario09 <InadequateControlAlgorithm> for UCA03 "Software provided the control action 'accelerate', while distToVehicle was stopDist. Because the stop distance was determined incorrectly."
+Scenario10 <ComponentFailure> "Motor of the vehicle malfunctions, causing the vehicle to accelerate uncontrollably." [H1]
+
+Scenario11 <IncorrectInformationProvided> for UCA04 "Software provided the control action 'accelerate', while docked was yes. Because the docking sensor incorrectly sent that the vehicles are not docked anymore."
+Scenario12 <IncorrectInformationProvided> for UCA04 "Software provided the control action 'accelerate', while docked was yes. Because the docking sensor malfunctioned and did not register that the vehicles are docked."
+Scenario13 <InadequateControlAlgorithm> for UCA04 "Software provided the control action 'accelerate', while docked was yes. Because it did not check whether the vehicles are already undocked before sending a control action."
+
+Scenario14 <WrongProcessModel> for UCA06 "Software did not provide the control action 'decelerate', while distToVehicle was decDist, contact was no, and speed was driving. Because it incorrectly believes that the distance is still greater."
+Scenario15 <MeasurementInaccurate> for UCA06 "Software did not provide the control action 'decelerate', while distToVehicle was decDist, contact was no, and speed was driving. Because the measurment of the distance sensor got imprecise."
+Scenario16 <ComponentFailure> for UCA06 "Software did not provide the control action 'decelerate', while distToVehicle was decDist, contact was no, and speed was driving. Because the controller had not enough power to determine and sent an action."
+Scenario17 <ComponentFailure> for UCA06 "Software did not provide the control action 'decelerate', while distToVehicle was decDist, contact was no, and speed was driving. Because the motor did not realize the sent control action."
+Scenario18 <DelayedFeedback> for UCA08 "Software provided the control action 'decelerate' too late, while distToVehicle was decDist, contact was no, and speed was driving. Because the distance sensor sent the current value with delay."
+Scenario19 <DelayedOperation> for UCA08 "Software provided the control action 'decelerate' too late, while distToVehicle was decDist, contact was no, and speed was driving. Because the motor implemented the control action with delay."
+Scenario20 <WrongProcessModel> for UCA10 "Software stopped the control action 'decelerate' too soon, while distToVehicle was decDist, contact was no, and speed was driving. Because it incorrectly believes that the stop distance is already reached."
+Scenario21 <ComponentFailure> for UCA10 "Software stopped the control action 'decelerate' too soon, while distToVehicle was decDist, contact was no, and speed was driving. Because the motor malfunctioned and did not react anymore."
+
+Scenario22 <WrongProcessModel> for UCA12 "Software did not provide the control action 'stop', while distToVehicle was stopDist, and speed was approaching. Because it incorrectly believes that the stop distance is not reached yet."
+Scenario23 <ComponentFailure> for UCA12 "Software did not provide the control action 'stop', while distToVehicle was stopDist, and speed was approaching. Because the action does not reach the motor."
+Scenario24 <WrongProcessModel> for UCA12 "Software did not provide the control action 'stop', while distToVehicle was stopDist, and speed was approaching. Because it incorrectly believes that the vehicle already stopped."
+Scenario25 <WrongProcessModel> for UCA17 "Software did not provide the control action 'stop', while contact was yes, and speed was approaching. Because it incorrectly believes that the vehicles are not in contact."
+Scenario26 <DelayedFeedback> for UCA19 "Software provided the control action 'stop' too late, while distToVehicle was stopDist, and speed was approaching. Because the update from the distance sensor was delayed."
+Scenario27 <InadequateControlAlgorithm> for UCA19 "Software provided the control action 'stop' too late, while distToVehicle was stopDist, and speed was approaching. Because it took too long to determine the control action."
+
+Scenario28 <WrongProcessModel> for UCA26 "Software provided the control action 'dock to other vehicle', while speed was driving. Because it incorrectly believes that the vehicle has already stopped."
+Scenario29 <IncorrectInformationProvided> for UCA26 "Software provided the control action 'dock to other vehicle', while speed was driving. Because the touch sensor malfunctions and sents that another vehicle is near enough for a docking maneuver."
+Scenario30 <InadequateControlAlgorithm> for UCA27 "Software provided the control action 'dock to other vehicle', while speed was approaching. Because it checked the touching sensor on the wrong side."
+Scenario31 <WrongProcessModel> for UCA28 "Software provided the control action 'dock to other vehicle', while distToVehicle was decDist. Because it incorrectly believes that the distance is already low enough."
+Scenario32 <IncorrectInformationProvided> for UCA30 "Software provided the control action 'dock to other vehicle', while contact was no. Because the touch sensor relocated leading to false information."
+Scenario33 <IncorrectInformationProvided> for UCA30 "Software provided the control action 'dock to other vehicle', while contact was no. Because the touch sensor detoriated leading to false information."
+
+Scenario34 <ComponentFailure> "The undocking mechanism malfunctions leading to an incomplete undocking such that the sensors do not sense that the vehicles are docked anymore." [H2]
+

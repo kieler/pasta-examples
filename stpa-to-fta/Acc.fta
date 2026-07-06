@@ -1,0 +1,36 @@
+Components
+Scenario01 "Controller provided the control action 'accelerate', while dist was decDist. Because Controller incorrectly believes that distance is accDist."
+Scenario18 "Controller did not provide the control action 'stop', while dist was stopDist. Because Controller incorrectly believes that distance is decDist"
+Scenario04 "Controller provided the control action 'accelerate', while dist was decDist. Because the current distance is sent too late from the distance sensor."
+Scenario16 "Controller provided the control action 'decelerate' too late, while dist was decDist. Because the current distance is sent too late from the distance sensor."
+Scenario19 "Controller provided the control action 'stop' too late, while dist was stopDist. Because the current distance is sent too late from the distance sensor."
+Scenario05 "Controller provided the control action 'accelerate', while dist was decDist. Because the control algorithm did not calculate the safe distance correctly."
+Scenario10 "Controller provided the control action 'accelerate' too early, while dist was accDist. Because the calculation of the safe distance is inaccurate."
+Scenario02 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor deteriorated over time leading to false measurment of the current distance."
+Scenario12 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the measurment of the distance sensor got imprecise."
+Scenario03 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor broke."
+Scenario13 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the motor actuator malfunctioned and hence the action could not be executed."
+Scenario14 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the controller had not enough power to determine and sent an action."
+Scenario06 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor malfuntioned and sent the wrong distance value."
+Scenario07 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor relocated leading to a wrong distance value."
+Scenario08 "Controller provided the control action 'accelerate', while dist was decDist. Because the distance sensor did not sent any value."
+Scenario09 "Controller applied the control action 'accelerate' too long, while dist was accDist. Because the calculation of the safe distance and hence the determination of the next control action is taking too long."
+Scenario15 "Controller did not provide the control action 'decelerate', while dist was decDist. Because the determination of the correct control action is taking too long."
+Scenario11 "Motor of the vehicle malfunctions, causing the vehicle to accelerate uncontrollably."
+Scenario17 "Controller stopped the control action 'decelerate' too soon, while dist was decDist. Because the distance sensor sent an inaccurate value."
+
+TopEvent
+"H01: Vehicle does not keep a minimum distance" = G0
+
+Gates
+G1 "WrongProcessModel" = Scenario01 or Scenario18
+G4 "DelayedFeedback" = Scenario04 or Scenario16 or Scenario19
+G5 "InadequateControlAlgorithm" = Scenario05 or Scenario10
+G2 "ChangesOverTime" = Scenario02 or Scenario12
+G3 "ComponentFailure" = Scenario03 or Scenario13 or Scenario14
+G6 "IncorrectInformationProvided" = Scenario06 or Scenario07
+G7 "MissingFeedback" = Scenario08
+G8 "DelayedOperation" = Scenario09 or Scenario15
+G9 "No causal factor" = Scenario11
+G10 "MeasurementInaccurate" = Scenario17
+G0 = G1 or G2 or G3 or G4 or G5 or G6 or G7 or G8 or G9 or G10

@@ -1,0 +1,293 @@
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==decSpeed) -> (controlAction!=Software.acc)))", "Software.acc not provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==decSpeed", "UCA01" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed) -> (controlAction!=Software.acc)))", "Software.acc not provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed", "UCA02" 
+@LTL "X(G ((dist_to_vehicle<=dockDist) -> (controlAction!=Software.acc)))", "Software.acc not provided in context dist_to_vehicle<=dockDist", "UCA03" 
+@LTL "X(G ((otherDocked) -> (controlAction!=Software.acc)))", "Software.acc not provided in context otherDocked", "UCA04" 
+@LTL "X(G ((selfDocked) -> (controlAction!=Software.acc)))", "Software.acc not provided in context selfDocked", "UCA05" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed) -> (controlAction==Software.dec)))", "Software.dec provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed", "UCA06" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed) -> (controlAction==Software.dec)))", "Software.dec provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed", "UCA07" 
+@LTL "X(((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed) -> (controlAction==Software.dec)) && G ((!(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed)) -> (X((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed) -> (controlAction==Software.dec)))))", "Software.dec not provided too late in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed", "UCA08" 
+@LTL "X(((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed) -> (controlAction==Software.dec)) && G ((!(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed)) -> (X((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed) -> (controlAction==Software.dec)))))", "Software.dec not provided too late in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed", "UCA09" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed && controlAction==Software.dec) -> (X((controlAction!=Software.dec) -> (!(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed))))))", "Software.dec not stopped too soon in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed", "UCA10" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && controlAction==Software.dec) -> (X((controlAction!=Software.dec) -> (!(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed))))))", "Software.dec not stopped too soon in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed", "UCA11" 
+@LTL "X(G ((dist_to_vehicle<=dockDist&&speed==decSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context dist_to_vehicle<=dockDist&&speed==decSpeed", "UCA12" 
+@LTL "X(G ((dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed", "UCA13" 
+@LTL "X(G ((dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed", "UCA14" 
+@LTL "X(G ((dist_to_vehicle<=dockDist&&speed==desiredSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context dist_to_vehicle<=dockDist&&speed==desiredSpeed", "UCA15" 
+@LTL "X(G ((dist_to_vehicle<=dockDist&&speed>desiredSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context dist_to_vehicle<=dockDist&&speed>desiredSpeed", "UCA16" 
+@LTL "X(G ((contact&&speed==decSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context contact&&speed==decSpeed", "UCA17" 
+@LTL "X(G ((contact&&speed>0 && speed<decSpeed) -> (controlAction==Software.stop)))", "Software.stop provided in context contact&&speed>0 && speed<decSpeed", "UCA18" 
+@LTL "X(((dist_to_vehicle<=dockDist&&speed==decSpeed) -> (controlAction==Software.stop)) && G ((!(dist_to_vehicle<=dockDist&&speed==decSpeed)) -> (X((dist_to_vehicle<=dockDist&&speed==decSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context dist_to_vehicle<=dockDist&&speed==decSpeed", "UCA19" 
+@LTL "X(((dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed) -> (controlAction==Software.stop)) && G ((!(dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed)) -> (X((dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed", "UCA20" 
+@LTL "X(((dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed) -> (controlAction==Software.stop)) && G ((!(dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed)) -> (X((dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed", "UCA21" 
+@LTL "X(((dist_to_vehicle<=dockDist&&speed==desiredSpeed) -> (controlAction==Software.stop)) && G ((!(dist_to_vehicle<=dockDist&&speed==desiredSpeed)) -> (X((dist_to_vehicle<=dockDist&&speed==desiredSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context dist_to_vehicle<=dockDist&&speed==desiredSpeed", "UCA22" 
+@LTL "X(((dist_to_vehicle<=dockDist&&speed>desiredSpeed) -> (controlAction==Software.stop)) && G ((!(dist_to_vehicle<=dockDist&&speed>desiredSpeed)) -> (X((dist_to_vehicle<=dockDist&&speed>desiredSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context dist_to_vehicle<=dockDist&&speed>desiredSpeed", "UCA23" 
+@LTL "X(((contact&&speed==decSpeed) -> (controlAction==Software.stop)) && G ((!(contact&&speed==decSpeed)) -> (X((contact&&speed==decSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context contact&&speed==decSpeed", "UCA24" 
+@LTL "X(((contact&&speed>0 && speed<decSpeed) -> (controlAction==Software.stop)) && G ((!(contact&&speed>0 && speed<decSpeed)) -> (X((contact&&speed>0 && speed<decSpeed) -> (controlAction==Software.stop)))))", "Software.stop not provided too late in context contact&&speed>0 && speed<decSpeed", "UCA25" 
+@LTL "X(G ((speed>decSpeed && speed<desiredSpeed) -> (controlAction!=Software.dock)))", "Software.dock not provided in context speed>decSpeed && speed<desiredSpeed", "UCA26" 
+@LTL "X(G ((speed==decSpeed) -> (controlAction!=Software.dock)))", "Software.dock not provided in context speed==decSpeed", "UCA27" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist) -> (controlAction!=Software.dock)))", "Software.dock not provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist", "UCA28" 
+@LTL "X(G ((dist_to_vehicle>=approachDist) -> (controlAction!=Software.dock)))", "Software.dock not provided in context dist_to_vehicle>=approachDist", "UCA29" 
+@LTL "X(G ((!contact) -> (controlAction!=Software.dock)))", "Software.dock not provided in context !contact", "UCA30" 
+@LTL "X(G ((dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact) -> (controlAction==Software.acc)))", "Software.acc provided in context dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact", "DCA01" 
+@LTL "X(G ((dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact) -> (controlAction==Software.acc)))", "Software.acc provided in context dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact", "DCA02" 
+@LTL "X(G ((dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact) -> (controlAction==Software.acc)))", "Software.acc provided in context dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact", "DCA03" 
+@LTL "X(G ((dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact) -> (controlAction==Software.acc)))", "Software.acc provided in context dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact", "DCA04" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact) -> (controlAction==Software.acc)))", "Software.acc provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact", "DCA05" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact) -> (controlAction==Software.dec)))", "Software.dec provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact", "DCA06" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact) -> (controlAction==Software.dec)))", "Software.dec provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact", "DCA07" 
+@LTL "X(G ((dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact) -> (controlAction==Software.dec)))", "Software.dec provided in context dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact", "DCA08" 
+@LTL "X(G ((dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact) -> (controlAction==Software.dec)))", "Software.dec provided in context dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact", "DCA09" 
+@LTL "X(G ((speed==decSpeed&&dist_to_vehicle>dockDist && dist_to_vehicle<approachDist) -> (controlAction!=Software.dec)))", "Software.dec not provided in context speed==decSpeed&&dist_to_vehicle>dockDist && dist_to_vehicle<approachDist", "DCA10" 
+@LTL "X(G ((contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist) -> (controlAction==Software.dock)))", "Software.dock provided in context contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist", "DCA11" 
+@LTL "X(G ((selfDocked&&dockedTime>=dockingTime&&speed==0) -> (controlAction==Software.undock)))", "Software.undock provided in context selfDocked&&dockedTime>=dockingTime&&speed==0", "DCA12" 
+@LTL "X(G ((!selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist) -> (controlAction==Software.rev)))", "Software.rev provided in context !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist", "DCA13" 
+scchart STT_Statechart {
+
+enum Software {NONE, acc, dec, stop, rev, dock, undock}
+input int dist_to_vehicle
+input int dockDist
+input int approachDist
+input int speed
+input int decSpeed
+input int desiredSpeed
+input bool otherDocked
+input bool selfDocked
+input bool contact
+input int dockedTime
+input int dockingTime
+output ref Software controlAction
+
+initial state NoAction {
+entry do controlAction = Software.NONE
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) && speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact  && !(speed==desiredSpeed) go to dec
+
+state acc {
+entry do controlAction = Software.acc
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) && speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact  && !(speed==desiredSpeed) go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==decSpeed go to NoAction
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed go to NoAction
+if dist_to_vehicle<=dockDist go to NoAction
+if otherDocked go to NoAction
+if selfDocked go to NoAction
+
+state dec {
+entry do controlAction = Software.dec
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if speed==decSpeed&&dist_to_vehicle>dockDist && dist_to_vehicle<approachDist go to NoAction
+
+state stop {
+entry do controlAction = Software.stop
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) && speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact  && !(speed==desiredSpeed) go to dec
+
+state rev {
+entry do controlAction = Software.rev
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) && speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if selfDocked&&dockedTime>=dockingTime&&speed==0 go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact  && !(speed==desiredSpeed) go to dec
+
+state dock {
+entry do controlAction = Software.dock
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) && speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 go to undock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact  && !(speed==desiredSpeed) go to dec
+if speed>decSpeed && speed<desiredSpeed go to NoAction
+if speed==decSpeed go to NoAction
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist go to NoAction
+if dist_to_vehicle>=approachDist go to NoAction
+if !contact go to NoAction
+
+state undock {
+entry do controlAction = Software.undock
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) && speed==desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==desiredSpeed&&!contact && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>decSpeed && speed<desiredSpeed&&!contact go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if dist_to_vehicle>=approachDist&&speed>desiredSpeed&&!contact go to dec
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed>desiredSpeed&&!contact  && !(speed==desiredSpeed) go to dec
+
+state dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed "dec (dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed)" {
+entry do controlAction = Software.dec
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed && !(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 && !(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist && !contact && speed>decSpeed && speed<desiredSpeed) go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact && !(speed>decSpeed && speed<desiredSpeed) go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if speed==decSpeed&&dist_to_vehicle>dockDist && dist_to_vehicle<approachDist && !(!contact && speed>decSpeed && speed<desiredSpeed) go to NoAction
+
+state dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedEqualTodesiredSpeed "dec (dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed)" {
+entry do controlAction = Software.dec
+}
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed>decSpeed && speed<desiredSpeed && !(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&!contact&&speed==desiredSpeed) go to dec_dist_to_vehicleGreaterThandockDistAnddist_to_vehicleLessThanapproachDistAndNotcontactAndspeedGreaterThandecSpeedAndspeedLessThandesiredSpeed
+if !selfDocked&&!otherDocked&&dockedTime>=dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to rev
+if selfDocked&&dockedTime>=dockingTime&&speed==0 && !(dist_to_vehicle>dockDist && dist_to_vehicle<approachDist && !contact && speed==desiredSpeed) go to undock
+if contact&&!selfDocked&&dockedTime<dockingTime&&speed==0&&dist_to_vehicle<=dockDist go to dock
+if dist_to_vehicle>dockDist && dist_to_vehicle<approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact && !(speed==desiredSpeed) go to acc
+if dist_to_vehicle>=approachDist&&speed>0 && speed<decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed>decSpeed && speed<desiredSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==decSpeed&&!otherDocked&&!selfDocked&&!contact go to acc
+if dist_to_vehicle>=approachDist&&speed==0&&!otherDocked&&!selfDocked&&!contact go to acc
+if contact&&speed>0 && speed<decSpeed go to stop
+if contact&&speed==decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>decSpeed && speed<desiredSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed>0 && speed<decSpeed go to stop
+if dist_to_vehicle<=dockDist&&speed==decSpeed go to stop
+if speed==decSpeed&&dist_to_vehicle>dockDist && dist_to_vehicle<approachDist && !(!contact && speed==desiredSpeed) go to NoAction
+
+}

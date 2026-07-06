@@ -14,40 +14,37 @@
 @LTL "X(G ((dist>minDist && dist<desiredDist) -> (controlAction!=Controller.stop)))", "Controller.stop not provided in context dist>minDist && dist<desiredDist", "DCA04" 
 scchart SBM_Controller {
 
-enum Controller {accelerate, decelerate, stop, NULL}
-@AssumeRange 0,1000
+enum Controller {NONE, ACCELERATE, DECELERATE, STOP}
 input int dist
-@AssumeRange 7,7
 input int minDist
-@AssumeRange 7,1000
 input int desiredDist
-ref Controller controlAction
+output ref Controller controlAction
 
-initial state NoAction {
-entry do controlAction = Controller.NULL
+initial state s_0 {
+entry do controlAction = Controller.NONE
 }
 if dist>minDist && dist<desiredDist go to decelerate_distGreaterThanminDistAnddistLessThandesiredDist
-if dist>desiredDist go to accelerate_distGreaterThandesiredDist
-if dist<=minDist go to stop
+if dist>desiredDist go to accelerate_distGreaterThandesiredDist label "2: dist >\ndesiredDist"
+if dist<=minDist go to s_stop
 
-state stop {
-entry do controlAction = Controller.stop
+state s_stop {
+entry do controlAction = Controller.STOP
 }
 if dist>minDist && dist<desiredDist go to decelerate_distGreaterThanminDistAnddistLessThandesiredDist
-if dist>desiredDist go to accelerate_distGreaterThandesiredDist
+if dist>desiredDist go to accelerate_distGreaterThandesiredDist label "2: dist >\ndesiredDist"
 
-state accelerate_distGreaterThandesiredDist "accelerate (dist>desiredDist)" {
-entry do controlAction = Controller.accelerate
+state accelerate_distGreaterThandesiredDist "s_acc_dist>desiredDist" {
+entry do controlAction = Controller.ACCELERATE
 }
 if dist>minDist && dist<desiredDist go to decelerate_distGreaterThanminDistAnddistLessThandesiredDist
-if dist<=minDist go to stop
-if dist==desiredDist go to NoAction
-if !(dist>desiredDist) go to NoAction
+if dist<=minDist go to s_stop label "2: dist <=\nminDist"
+if dist==desiredDist go to s_0 label "3: dist ==\ndesiredDist"
+if !(dist>desiredDist) go to s_0 label "4: !(dist >\ndesiredDist)"
 
-state decelerate_distGreaterThanminDistAnddistLessThandesiredDist "decelerate (dist>minDist && dist<desiredDist)" {
-entry do controlAction = Controller.decelerate
+state decelerate_distGreaterThanminDistAnddistLessThandesiredDist "s_dec_dist>minDist && dist<desiredDist" {
+entry do controlAction = Controller.DECELERATE
 }
 if dist>desiredDist && !(dist>minDist && dist<desiredDist) go to accelerate_distGreaterThandesiredDist
-if dist<=minDist && !(dist>minDist && dist<desiredDist) go to stop
+if dist<=minDist && !(dist>minDist && dist<desiredDist) go to s_stop
 
 }
